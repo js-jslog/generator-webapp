@@ -1,0 +1,14 @@
+{
+  "name": "generator-webpack",
+  "version": "0.1.0",
+  "description": "A Yeoman Generator to create a simple webpack project",
+  "files": [
+    "generators"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "yeoman-generator": "^4.7.2"
+  }
+}
