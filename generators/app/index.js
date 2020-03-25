@@ -6,7 +6,7 @@ const MyBase = class extends Generator {
     // Copy all non-dotfiles
     this.fs.copy(
       // If dotfiles are reintroduced
-      // the repeat this with '.*'
+      // then repeat this section with '.*'
       this.templatePath('**/*'),
       this.destinationRoot()
     );
