@@ -2,6 +2,9 @@
   "name": "generator-webpack",
   "version": "0.1.0",
   "description": "A Yeoman Generator to create a simple webpack project",
+  "scripts": {
+    "postinstall": "npm link generator-dotfiles"
+  },
   "files": [
     "generators"
   ],
