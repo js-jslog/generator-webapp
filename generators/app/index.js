@@ -19,6 +19,25 @@ module.exports = class extends MyBase {
   };
 
   writing() {
+    const pkgJson = {
+      name: 'webpack',
+      description: 'A basic webpack project served with hot module reloading',
+      scripts: {
+        start: 'webpack-dev-server --open',
+        build: 'webpack'
+      },
+      devDependencies: {
+        'clean-webpack-plugin': '^3.0.0',
+        'html-webpack-plugin': '^3.2.0',
+        webpack: '^4.41.6',
+        'webpack-cli': '^3.3.11',
+        'webpack-dev-server': '^3.10.3',
+        'webpack-manifest-plugin': '^2.2.0'
+      },
+    };
+
+    this.fs.extendJSON(this.destinationPath('package.json'), pkgJson);
+
     this.copyTemplateFiles();
     this.config.save();
   }
