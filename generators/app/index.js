@@ -1,5 +1,6 @@
 const Generator = require('yeoman-generator');
 const DotfilesGenerator = require.resolve('generator-dotfiles/generators/app');
+const fs = require('fs');
 
 const MyBase = class extends Generator {
   copyTemplateFiles() {
@@ -19,6 +20,12 @@ module.exports = class extends MyBase {
   };
 
   writing() {
+
+    this.copyTemplateFiles();
+    this.config.save();
+  }
+
+  install() {
     const pkgJson = {
       name: 'webpack',
       description: 'A basic webpack project served with hot module reloading',
@@ -36,13 +43,10 @@ module.exports = class extends MyBase {
       },
     };
 
-    this.fs.extendJSON(this.destinationPath('package.json'), pkgJson);
+    const packageJsonContent = this.fs.readJSON(this.destinationPath('package.json'));
+    const newPackageJsonContent = {...packageJsonContent, ...pkgJson};
+    fs.writeFileSync(this.destinationPath('package.json'), JSON.stringify(newPackageJsonContent, null, 4));
 
-    this.copyTemplateFiles();
-    this.config.save();
-  }
-
-  install() {
     this.npmInstall();
   }
 };
