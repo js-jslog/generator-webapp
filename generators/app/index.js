@@ -1,6 +1,6 @@
 const Generator = require('yeoman-generator');
 const DotfilesGenerator = require.resolve('generator-dotfiles/generators/app');
-const fs = require('fs');
+const augmentPackageJson = require('generator-dotfiles/utilities/augmentPackageJson');
 
 const MyBase = class extends Generator {
   copyTemplateFiles() {
@@ -12,21 +12,8 @@ const MyBase = class extends Generator {
       this.destinationRoot()
     );
   };
-};
-
-module.exports = class extends MyBase {
-  initializing() {
-    this.composeWith(DotfilesGenerator);
-  };
-
-  writing() {
-
-    this.copyTemplateFiles();
-    this.config.save();
-  }
-
-  install() {
-    const pkgJson = {
+  decoratePackageJsonBeforeInstall() {
+    const packageJsonAugmentation = {
       name: 'webpack',
       description: 'A basic webpack project served with hot module reloading',
       scripts: {
@@ -42,11 +29,22 @@ module.exports = class extends MyBase {
         'webpack-manifest-plugin': '^2.2.0'
       },
     };
+    augmentPackageJson(packageJsonAugmentation, this.destinationPath('package.json'));
+  };
+};
 
-    const packageJsonContent = this.fs.readJSON(this.destinationPath('package.json'));
-    const newPackageJsonContent = {...packageJsonContent, ...pkgJson};
-    fs.writeFileSync(this.destinationPath('package.json'), JSON.stringify(newPackageJsonContent, null, 4));
+module.exports = class extends MyBase {
+  initializing() {
+    this.composeWith(DotfilesGenerator);
+  };
 
+  writing() {
+    this.copyTemplateFiles();
+    this.config.save();
+  }
+
+  install() {
+    this.decoratePackageJsonBeforeInstall();
     this.npmInstall();
   }
 };
